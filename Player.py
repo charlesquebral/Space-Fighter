@@ -66,5 +66,65 @@ playerIMG=pygame.image.load(os.path.join('Material','Image',"spaceship.png")).co
         self.bonus_time=0
         self.bullet_gap=0
         self.bullet_num=1
+    def update(self):
+        
+        self.healthbar()
+        self.heart(100,30)
+        self.shoot()
+        self.hit_player()
+        self.hit_bonus()
+        #set a timer starting now comparing to the respawn time, after 2 seconds, show player image
+        current_time=pygame.time.get_ticks()
+        if self.respawn and current_time-self.respawn_time>2000:
+            self.respawn=False
+        if current_time-self.bonus_time>10000:
+            self.bullet_num=1
+            self.bonus_time=current_time
+        #key action responding
+        key_pressed=pygame.key.get_pressed()
+        if self.respawn==False:
+            if key_pressed[pygame.K_RIGHT]:
+             self.rect.x=self.rect.x+self.speed
+            if key_pressed[pygame.K_LEFT]:
+             self.rect.x=self.rect.x-self.speed
+            if key_pressed[pygame.K_UP]:
+             self.rect.y=self.rect.y-self.speed
+            if key_pressed[pygame.K_DOWN]:
+                self.rect.y=self.rect.y+self.speed
+            if self.rect.right>w:
+                self.rect.right=w
+            if self.rect.left<0:
+                self.rect.x=0
+            if self.rect.bottom>h:
+                self.rect.bottom=h
+            if self.rect.top<0:
+              self.rect.top=0
+        
+     #create one bullet      
+    def shoot(self):
+        if self.respawn==False:
+            if self.bullet_gap>=20:
+                self.bullet_gap=0
+            elif self.bullet_gap>0:
+                self.bullet_gap+=1
+            if self.bullet_gap==0:
+                if self.bullet_num==1:
+                    bullet=Bullet(bulletIMG,30,30,self.rect.centerx,self.rect.top,1,-10)
+                    spriteGroup.add(bullet)
+                    bulletGroup.add(bullet)
+                    self.bullet_gap=1
+                elif self.bullet_num==2:
+                    bullet1=Bullet(bulletIMG,30,30,self.rect.left,self.rect.top,1,-10)
+                    bullet2=Bullet(bulletIMG,30,30,self.rect.right,self.rect.top,1,-10)
+                    spriteGroup.add(bullet1)
+                    bulletGroup.add(bullet1)
+                    spriteGroup.add(bullet2)
+                    bulletGroup.add(bullet2)
+                    self.bullet_gap=1
+                else:
+                    bullet=Bullet(laserIMG,50,1368,self.rect.centerx,self.rect.top+25,-1,1000)
+                    spriteGroup.add(bullet)
+                    bulletGroup.add(bullet)
+                    self.bullet_gap=100
         
        
