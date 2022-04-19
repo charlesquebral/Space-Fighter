@@ -17,9 +17,9 @@ def main_menu():
 
         for event in events:
           if event.type == pygame.QUIT: #if user clicks the x button, exit pygame
-            pygame.quit()
-            running = False
-            sys.exit() 
+            if quitButton():
+                pygame.quit()
+                sys.exit()
          
         
         pygame.display.set_caption("Main Menu")
@@ -37,7 +37,9 @@ def main_menu():
           
           return PAGE_OPTION
         if quit.click(screen, events):
-            running = False
-            pygame.quit()
-            sys.exit()
+            if quitButton():
+                pygame.quit()
+                sys.exit()
+            else:
+                return PAGE_MAIN
         pygame.display.update()
