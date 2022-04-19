@@ -8,9 +8,9 @@ def scoreboardMenu():
 
         for event in pygame.event.get():
           if event.type == pygame.QUIT: #if user clicks the x button, exit pygame
-            pygame.quit()
-            running = False
-            sys.exit()  
+            if quitButton():
+                pygame.quit()
+                sys.exit()   
        
         if __backButton(screen):
             
