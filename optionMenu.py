@@ -4,20 +4,23 @@ music = pygame.mixer.music.load('music.wav')
 pygame.mixer.music.play(-1)
 
 
+sound = 1.0     
 def optionsMenu():
     level = 1
-    sound = 1.0
+    global sound
 
     while True:
         clock.tick(FPS)
         screen.fill(BLACK)
         screen.blit(backgroundIMG, (0,0))
-        events = pygame.event.get()
 
         for event in pygame.event.get():
           if event.type == pygame.QUIT: #if user clicks the x button, exit pygame
-            pygame.quit()
-            sys.exit()  
+            if quitButton():
+                pygame.quit()
+                sys.exit()   
+
+        events = pygame.event.get()  
 
         if __backButton(screen):
           #break
