@@ -126,5 +126,128 @@ playerIMG=pygame.image.load(os.path.join('Material','Image',"spaceship.png")).co
                     spriteGroup.add(bullet)
                     bulletGroup.add(bullet)
                     self.bullet_gap=100
-        
+
+
+    # detect collision between player and the enemy, if player is hit, decrease health and reset enemy object
+    def hit_player(self):
+        hit_group = pygame.sprite.spritecollide(self, enemyGroup, True)
+        for enemy in hit_group:
+            self.minus_health(enemy.max_health)
+            if level == 1:
+                e = Enemy(enemy_covidIMG)
+                spriteGroup.add(e)
+                enemyGroup.add(e)
+            elif level == 2:
+                e = Enemy_UFO(enemy_ufoIMG)
+                spriteGroup.add(e)
+                enemyGroup.add(e)
+            elif level == 3:
+                e = Enemy_cthulhu(enemy_cthulhuIMG)
+                spriteGroup.add(e)
+                enemyGroup.add(e)
+            else:
+                random_int = random.randint(1, 3)
+                if random_int == 1:
+                    e = Enemy_cthulhu(enemy_cthulhuIMG)
+                    spriteGroup.add(e)
+                    enemyGroup.add(e)
+                elif random_int == 2:
+                    e = Enemy_cthulhu(enemy_cthulhuIMG)
+                    spriteGroup.add(e)
+                    enemyGroup.add(e)
+                elif random_int == 3:
+                    e = Enemy_cthulhu(enemy_cthulhuIMG)
+                    spriteGroup.add(e)
+                    enemyGroup.add(e)
+        bullet_hit_group = pygame.sprite.spritecollide(self, ebulletGroup, True)
+        for ebullet in bullet_hit_group:
+            self.minus_health(10)
+
+
+    def hit_bonus(self):
+        hit_group = pygame.sprite.spritecollide(self, bonusGroup, True)
+
+        for bonus in hit_group:
+            r = random.randint(0, 2)
+            # for testing a specific bonus only r=2
+            if (bonus.type == "health"):
+                self.add_health(50)
+            elif bonus.type == "bullet":
+                self.bonus_time = pygame.time.get_ticks()
+                self.bullet_num = 2
+            elif bonus.type == "laser":
+                self.bonus_time = pygame.time.get_ticks()
+                # indicates constantly shooting laser instead of bullet
+                self.bullet_num = 999
+            # regenerate a random bonus after player get a bonus
+            if (r == 0):
+                bonus = Bonus(heartIMG, "health")
+                spriteGroup.add(bonus)
+                bonusGroup.add(bonus)
+            elif (r == 1):
+                bonus = Bonus(bonus_double_bulletIMG, "bullet")
+                spriteGroup.add(bonus)
+                bonusGroup.add(bonus)
+            elif (r == 2):
+                bonus = Bonus(bonus_laserIMG, "laser")
+                spriteGroup.add(bonus)
+                bonusGroup.add(bonus)
+
+    # detects collision between enemy and player bullet
+    def hit_enemy(attackGroup, victumGroup):
+        global level, game_level, score, enemyTotal
+
+        enemyTotal = int(8 / game_level)
+        hitGroup = pygame.sprite.groupcollide(attackGroup, victumGroup, True,
+                                              False)  # stores the collision objects in a list
+        for bullet in hitGroup:
+            # access the enemy that hit bullet
+            for enemy in hitGroup[bullet]:
+                # increase score by the enemy's maximum health, varies among types of enemies
+                score = score + enemy.max_health
+                # each bullet decrease 10 enemy health
+                enemy.minus_health(10)
+                # when enemy health run out, destroy the enemy object and spawn a new one according to score
+                if (enemy.current_health <= 0):
+
+                    spriteGroup.remove(enemy)
+                    enemyGroup.remove(enemy)
+                    enemy.kill()
+                    if game_level == 1:
+                        if (len(enemyGroup) < enemyTotal):
+                            print("LEVEL1:" + str(enemyTotal))
+                            e = Enemy(enemy_covidIMG)
+                            spriteGroup.add(e)
+                            enemyGroup.add(e)
+                    elif game_level == 2:
+                        if (len(enemyGroup) < enemyTotal):
+                            print("LEVEL2:" + str(enemyTotal))
+                            e = Enemy_UFO(enemy_ufoIMG)
+                            spriteGroup.add(e)
+                            enemyGroup.add(e)
+                    elif game_level == 3:
+
+                        if (len(enemyGroup) < enemyTotal):
+                            print("LEVEL3:" + str(enemyTotal))
+                            e = Enemy_cthulhu(enemy_cthulhuIMG)
+                            spriteGroup.add(e)
+                            enemyGroup.add(e)
+
+                    else:
+                        if (len(enemyGroup) < enemyTotal):
+                            print("LEVEL4:" + str(enemyTotal))
+                            random_int = random.randint(1, 3)
+                            if random_int == 1:
+                                e = Enemy(enemy_covidIMG)
+                                spriteGroup.add(e)
+                                enemyGroup.add(e)
+                            elif random_int == 2:
+                                e = Enemy_UFO(enemy_ufoIMG)
+                                spriteGroup.add(e)
+                                enemyGroup.add(e)
+                            elif random_int == 3:
+                                e = Enemy_cthulhu(enemy_cthulhuIMG)
+                                spriteGroup.add(e)
+                                enemyGroup.add(e)
+
        
