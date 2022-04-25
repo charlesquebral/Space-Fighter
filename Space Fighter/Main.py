@@ -39,6 +39,8 @@ PAGE_OPTION=4
 PAGE_GAMEOVER=5
 
 IS_PAUSE=False
+ButtonLength = 150
+ButtonWidth = 50
 
 def loadImage(image):
     return pygame.image.load(os.path.join('Material','Image', image)).convert()
@@ -607,7 +609,7 @@ def name():
         screen.blit(txt_surface, (input_box.x+5, input_box.y+12.5))
         # Blit the input_box rect.
         pygame.draw.rect(screen, color, input_box, 2)
-        save=Button("SAVE", pygame.font.match_font('arial'), 18, BLACK, w/2+250, h/2,WHITE)
+        save=Button("SAVE", pygame.font.match_font('arial'), 18, BLACK, w/2+250, h/2,WHITE, ButtonLength, ButtonWidth)
         
         if save.click(screen,events):
             if text is None or text=='':
@@ -694,10 +696,10 @@ def __backButton(surface):
     return action
 
 def main_menu():
-      play = Button("PLAY", None, fontSize,BLACK,w / 2, 350,WHITE)
-      scoreboard = Button("SCOREBOARD", None, fontSize, BLACK, w / 2, 450,WHITE)
-      options = Button("OPTIONS", None, fontSize, BLACK,w / 2, 550,WHITE)
-      quit = Button("QUIT", None, fontSize, BLACK, w / 2, 650,WHITE)
+      play = Button("PLAY", None, fontSize,BLACK,w / 2, 350,WHITE, ButtonLength, ButtonWidth)
+      scoreboard = Button("SCOREBOARD", None, fontSize, BLACK, w / 2, 450,WHITE, ButtonLength, ButtonWidth)
+      options = Button("OPTIONS", None, fontSize, BLACK,w / 2, 550,WHITE, ButtonLength, ButtonWidth)
+      quit = Button("QUIT", None, fontSize, BLACK, w / 2, 650,WHITE, ButtonLength, ButtonWidth)
       SPACESHIP = loadImage("spaceship.png")
       #SPACESHIP = pygame.image.load(os.path.join('Material','Image',"spaceship.png")).convert()
       SPACESHIP = pygame.transform.scale(SPACESHIP, (200, 200))
@@ -815,11 +817,11 @@ def Main_Prompt():
         font = pygame.font.Font(None, 40)
         text = font.render("Return to Main Menu?", True, WHITE)
         screen.blit(text, (510, 330))
-        yes = Button('YES', None, 40,BLACK,  600, 380,WHITE)
+        yes = Button('YES', None, 40,BLACK,  600, 380,WHITE, ButtonLength, ButtonWidth)
         if yes.click(screen, events):
             return True 
 
-        no = Button('NO', None, 40,BLACK,  810, 380,WHITE)
+        no = Button('NO', None, 40,BLACK,  810, 380,WHITE, ButtonLength, ButtonWidth)
         if no.click(screen, events):
             return False
         pygame.display.update()
@@ -829,9 +831,9 @@ def pause_game(events):
     pygame.draw.rect(screen, BROWN, pygame.Rect(w/2-150,180,300,350))
     pygame.draw.rect(screen, WHITE, pygame.Rect(w/2-150,180,300,350),width=border_width)
     display_text(screen,"Pause",WHITE,48,w/2,200)
-    resume = Button("RESUME", None, fontSize, BLACK,w / 2, 300,WHITE)
-    main = Button("MAIN MENU", None, fontSize, BLACK, w / 2, 380,WHITE)
-    quit = Button("QUIT", None, fontSize, BLACK, w / 2, 460,WHITE)
+    resume = Button("RESUME", None, fontSize, BLACK,w / 2, 300,WHITE, ButtonLength, ButtonWidth)
+    main = Button("MAIN MENU", None, fontSize, BLACK, w / 2, 380,WHITE, ButtonLength, ButtonWidth)
+    quit = Button("QUIT", None, fontSize, BLACK, w / 2, 460,WHITE, ButtonLength, ButtonWidth)
      
         
 
@@ -873,10 +875,10 @@ def pause_game(events):
 def gameover_menu():
       global game_level,score
       
-      replay = Button("REPLAY", None, fontSize,BLACK,w / 2, 350,WHITE)
-      scoreboard = Button("SCOREBOARD", None, fontSize,BLACK,w / 2, 450,WHITE)
-      main = Button("MAIN MENU", None, fontSize, BLACK, w / 2, 550,WHITE)
-      quit = Button("QUIT", None, fontSize, BLACK, w / 2, 650,WHITE)
+      replay = Button("REPLAY", None, fontSize,BLACK,w / 2, 350,WHITE, ButtonLength, ButtonWidth)
+      scoreboard = Button("SCOREBOARD", None, fontSize,BLACK,w / 2, 450,WHITE, ButtonLength, ButtonWidth)
+      main = Button("MAIN MENU", None, fontSize, BLACK, w / 2, 550,WHITE, ButtonLength, ButtonWidth)
+      quit = Button("QUIT", None, fontSize, BLACK, w / 2, 650,WHITE, ButtonLength, ButtonWidth)
       #SPACESHIP = pygame.image.load(os.path.join('Material','Image',"spaceship.png")).convert()
       #SPACESHIP = pygame.transform.scale(SPACESHIP, (200, 200))
       #SPACESHIP.set_colorkey(WHITE)
@@ -1169,8 +1171,8 @@ def optionsMenu():
         screen.blit(text, (w/2.5, 30))
         levelName = font.render("LEVEL", True, WHITE)
         screen.blit(levelName, (150, 150) )
-        button_level_down = Button("<", None, 100, BLACK, 500, 160, WHITE)
-        button_level_up = Button(">", None, 100, BLACK,  1000, 160,WHITE)
+        button_level_down = Button("<", None, 100, BLACK, 500, 160, WHITE, ButtonLength, ButtonWidth)
+        button_level_up = Button(">", None, 100, BLACK,  1000, 160,WHITE, ButtonLength, ButtonWidth)
 
         if button_level_down.click(screen, events) and level > 1:
             level = level - 1
@@ -1187,8 +1189,8 @@ def optionsMenu():
         soundLevel = font.render("SOUND", True, WHITE)
         screen.blit(soundLevel, (150, 300))  
         
-        button_volume_down = Button("<", None, 100, BLACK,  500, 310,WHITE)
-        button_volume_up = Button(">", None, 100, BLACK,  1000, 310,WHITE)
+        button_volume_down = Button("<", None, 100, BLACK,  500, 310,WHITE, ButtonLength, ButtonWidth)
+        button_volume_up = Button(">", None, 100, BLACK,  1000, 310,WHITE, ButtonLength, ButtonWidth)
         if button_volume_down.click(screen, events) and volume > 0.0:
             volume = round(volume - 0.1, 1)
         elif button_volume_up.click(screen, events) and volume < 1.0:
