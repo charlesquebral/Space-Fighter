@@ -40,8 +40,8 @@ PAGE_GAMEOVER=5
 
 IS_PAUSE=False
 
-def loadImage(text):
-    return pygame.image.load(os.path.join('Material','Image', text)).convert()
+def loadImage(image):
+    return pygame.image.load(os.path.join('Material','Image', image)).convert()
 
 backgroundIMG=loadImage("background.png")
 backgroundIMG=pygame.transform.scale(backgroundIMG,(w,h))
@@ -739,9 +739,41 @@ def main_menu():
            else:
                 return PAGE_MAIN
         pygame.display.update()
-        
+
 def quitButton():
+    fontSize = 20
     while True:
+        lenButton = 500
+        widButton = 150
+        xPos = w/2-200
+        yPos = 300
+        clock.tick(FPS)
+        #screen.fill(BLACK)
+        #BACKGROUND = pygame.transform.scale(backgroundIMG, (500, 150))
+        
+        border_width=5
+        
+        pygame.draw.rect(screen, BROWN, pygame.Rect(xPos,yPos,lenButton,widButton))
+        pygame.draw.rect(screen, WHITE, pygame.Rect(xPos,yPos,lenButton,widButton), width=border_width)
+        
+        #screen.blit(BACKGROUND, (470,300))
+        events = pygame.event.get()
+        font = pygame.font.Font(None, fontSize+20)
+        text = font.render("Do you want to exit the game?", True, WHITE)
+        screen.blit(text, (530, 330))
+        lenButton = 80
+        widButton = 25
+        yPos += 80
+        yes = Button('YES', None, fontSize, BLACK,  650, yPos, WHITE, lenButton, widButton)
+        if yes.click(screen, events):
+            return True 
+
+        no = Button('NO', None, fontSize, BLACK,  810, yPos, WHITE, lenButton, widButton)
+        if no.click(screen, events):
+            return False
+        pygame.display.update()
+
+    """ while True:
         clock.tick(FPS)
         #screen.fill(BLACK)
         BACKGROUND = pygame.transform.scale(backgroundIMG, (500, 150))
@@ -768,7 +800,7 @@ def quitButton():
         no = Button('NO', None, 40,BLACK,  810, 380,WHITE)
         if no.click(screen, events):
             return False
-        pygame.display.update()
+        pygame.display.update() """
 def Main_Prompt():
     while True:
         clock.tick(FPS)
