@@ -26,12 +26,12 @@ class ButtonText():
     return self.clicked
 
 class Button(ButtonText):
-  def __init__(self, text, font, fontSize, text_color, x, y, button_color):
+  def __init__(self, text, font, fontSize, text_color, x, y, button_color, button_length, button_width):
     super().__init__(text, font, fontSize, text_color, x, y)
     
     self.button_color=button_color
     #self.textstring=text
-    self.rect= pygame.Rect(x,y,150,50) #this self.rect is different rect from the super class's self.rect
+    self.rect= pygame.Rect(x,y, button_length, button_width) #this self.rect is different rect from the super class's self.rect
     self.rect.centerx=x
     self.textrect = self.text.get_rect()
     self.textrect.centerx=self.rect.centerx
