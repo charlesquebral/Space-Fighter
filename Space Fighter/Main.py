@@ -40,7 +40,37 @@ PAGE_GAMEOVER=5
 
 IS_PAUSE=False
 
-backgroundIMG=pygame.image.load(os.path.join('Material','Image',"background.png")).convert()
+def loadImage(text):
+    return pygame.image.load(os.path.join('Material','Image', text)).convert()
+
+backgroundIMG=loadImage("background.png")
+backgroundIMG=pygame.transform.scale(backgroundIMG,(w,h))
+playerIMG=loadImage("spaceship.png")
+enemy_covidIMG=loadImage("enemy_covid.jpg")
+enemy_ufoIMG=loadImage("enemy_ufo.png")
+enemy_cthulhuIMG=loadImage("enemy_cthulhu.png")
+heartIMG=loadImage("heart_present.png")
+heartIMG=pygame.transform.scale(heartIMG,(50,50)) #change the original picture's resolution to w,h(50,50)
+heartIMG.set_colorkey(WHITE) #remove all white pixels and make them transparent
+
+heart_goneIMG=loadImage("heart_gone.png")
+heart_goneIMG=pygame.transform.scale(heart_goneIMG,(50,50)) #change the original picture's resolution to w,h(50,50)
+heart_goneIMG.set_colorkey(WHITE) #remove all white pixels and make them transparent
+
+bulletIMG=loadImage("bullet.png")
+enemy_bulletIMG=loadImage("enemy_bullet.png")
+bonus_double_bulletIMG=loadImage("bonus_double_bullet.jpg")
+
+bonus_double_bulletIMG=loadImage("bonus_double_bullet.jpg")
+laserIMG=loadImage("laser.png")
+laserIMG.set_colorkey(WHITE)
+
+bonus_laserIMG=loadImage("bonus_laser.jpg")
+pauseIMG=loadImage("pause.png")
+pauseIMG.set_colorkey(BLACK)
+
+
+""" backgroundIMG=pygame.image.load(os.path.join('Material','Image',"background.png")).convert()
 backgroundIMG=pygame.transform.scale(backgroundIMG,(w,h))
 playerIMG=pygame.image.load(os.path.join('Material','Image',"spaceship.png")).convert()
 enemy_covidIMG=pygame.image.load(os.path.join('Material','Image',"enemy_covid.jpg")).convert()
@@ -56,13 +86,14 @@ heart_goneIMG.set_colorkey(WHITE) #remove all white pixels and make them transpa
 
 bulletIMG=pygame.image.load(os.path.join('Material','Image',"bullet.png")).convert()
 enemy_bulletIMG=pygame.image.load(os.path.join('Material','Image',"enemy_bullet.png")).convert()
+
+bonus_double_bulletIMG=pygame.image.load(os.path.join('Material','Image',"bonus_double_bullet.jpg")).convert()
 laserIMG=pygame.image.load(os.path.join('Material','Image',"laser.png")).convert()
 laserIMG.set_colorkey(WHITE)
-bonus_double_bulletIMG=pygame.image.load(os.path.join('Material','Image',"bonus_double_bullet.jpg")).convert()
 #referenced https://www.engineerlive.com/content/how-laser-technology-changed-world
 bonus_laserIMG=pygame.image.load(os.path.join('Material','Image',"bonus_laser.jpg")).convert()
 pauseIMG=pygame.image.load(os.path.join('Material','Image',"pause.png")).convert()
-pauseIMG.set_colorkey(BLACK)
+pauseIMG.set_colorkey(BLACK) """
 
 #font style and font display section
 font_name=pygame.font.match_font('arial')
@@ -645,7 +676,8 @@ def __backButton(surface):
     action = False
     clicked = False
     mousePos = pygame.mouse.get_pos()
-    BACK = pygame.image.load(os.path.join('Material','Image',"back.png")).convert()
+    #BACK = pygame.image.load(os.path.join('Material','Image',"bullet.png")).convert()
+    BACK = loadImage("back.png")
     BACK = pygame.transform.scale(BACK, (50, 50))
     BACK.set_colorkey(BLACK)
     surface.blit(BACK, (15, 10))
@@ -666,7 +698,8 @@ def main_menu():
       scoreboard = Button("SCOREBOARD", None, fontSize, BLACK, w / 2, 450,WHITE)
       options = Button("OPTIONS", None, fontSize, BLACK,w / 2, 550,WHITE)
       quit = Button("QUIT", None, fontSize, BLACK, w / 2, 650,WHITE)
-      SPACESHIP = pygame.image.load(os.path.join('Material','Image',"spaceship.png")).convert()
+      SPACESHIP = loadImage("spaceship.png")
+      #SPACESHIP = pygame.image.load(os.path.join('Material','Image',"spaceship.png")).convert()
       SPACESHIP = pygame.transform.scale(SPACESHIP, (200, 200))
       SPACESHIP.set_colorkey(WHITE)
       
@@ -706,6 +739,7 @@ def main_menu():
            else:
                 return PAGE_MAIN
         pygame.display.update()
+        
 def quitButton():
     while True:
         clock.tick(FPS)
