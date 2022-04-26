@@ -29,7 +29,7 @@ def Music()
 
 
 	if scene == 2
-		mixer.music.load("gameplay.mp3")
+		mixer.music.load("gameplay_music.mp3")
 		mixer.music.play(-1)
 
 		#text = font.render('gameplay music played infinitely', True, black, white)
