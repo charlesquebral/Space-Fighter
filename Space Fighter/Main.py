@@ -8,6 +8,7 @@ import pygame
 from ModelClass.ButtonClass import *
 from ModelClass.ScoreClass import ScoreObject
 from ModelClass.BonusClass import *
+
 from ModelClass.BulletClass import Bullet, Bullet_Spread
 
 
@@ -67,35 +68,14 @@ bonus_double_bulletIMG=loadImage("bonus_double_bullet.jpg")
 laserIMG=loadImage("laser.png")
 laserIMG.set_colorkey(WHITE)
 
-bonus_laserIMG=loadImage("bonus_laser.jpg")
+bonus_laserIMG=loadImage("explosion_0.png")
 pauseIMG=loadImage("pause.png")
 pauseIMG.set_colorkey(BLACK)
 
 
-""" backgroundIMG=pygame.image.load(os.path.join('Material','Image',"background.png")).convert()
-backgroundIMG=pygame.transform.scale(backgroundIMG,(w,h))
-playerIMG=pygame.image.load(os.path.join('Material','Image',"spaceship.png")).convert()
-enemy_covidIMG=pygame.image.load(os.path.join('Material','Image',"enemy_covid.jpg")).convert()
-enemy_ufoIMG=pygame.image.load(os.path.join('Material','Image',"enemy_ufo.png")).convert()
-enemy_cthulhuIMG=pygame.image.load(os.path.join('Material','Image',"enemy_cthulhu.png")).convert()
-heartIMG=pygame.image.load(os.path.join('Material','Image',"heart_present.png")).convert()
-heartIMG=pygame.transform.scale(heartIMG,(50,50)) #change the original picture's resolution to w,h(50,50)
-heartIMG.set_colorkey(WHITE) #remove all white pixels and make them transparent
+    
 
-heart_goneIMG=pygame.image.load(os.path.join('Material','Image',"heart_gone.png")).convert()
-heart_goneIMG=pygame.transform.scale(heart_goneIMG,(50,50)) #change the original picture's resolution to w,h(50,50)
-heart_goneIMG.set_colorkey(WHITE) #remove all white pixels and make them transparent
 
-bulletIMG=pygame.image.load(os.path.join('Material','Image',"bullet.png")).convert()
-enemy_bulletIMG=pygame.image.load(os.path.join('Material','Image',"enemy_bullet.png")).convert()
-
-bonus_double_bulletIMG=pygame.image.load(os.path.join('Material','Image',"bonus_double_bullet.jpg")).convert()
-laserIMG=pygame.image.load(os.path.join('Material','Image',"laser.png")).convert()
-laserIMG.set_colorkey(WHITE)
-#referenced https://www.engineerlive.com/content/how-laser-technology-changed-world
-bonus_laserIMG=pygame.image.load(os.path.join('Material','Image',"bonus_laser.jpg")).convert()
-pauseIMG=pygame.image.load(os.path.join('Material','Image',"pause.png")).convert()
-pauseIMG.set_colorkey(BLACK) """
 
 #font style and font display section
 font_name=pygame.font.match_font('arial')
@@ -455,6 +435,9 @@ class Player(pygame.sprite.Sprite):
             
             self.add_health(100)
             #hide player for 2 seconds
+            expl = Explosion(self.rect.center,70)
+                
+            spriteGroup.add(expl)
             self.wait_respawn()
 
         
@@ -500,7 +483,10 @@ def hit_enemy(attackGroup,victumGroup):
             enemy.minus_health(10)
             #when enemy health run out, destroy the enemy object and spawn a new one according to score
             if (enemy.current_health<=0):
-               
+                print(enemy.rect.height)
+                expl = Explosion(enemy.rect.center,enemy.max_health*3)
+                
+                spriteGroup.add(expl)
                 spriteGroup.remove(enemy)
                 enemyGroup.remove(enemy)
                 enemy.kill()
@@ -542,6 +528,41 @@ def hit_enemy(attackGroup,victumGroup):
                             enemyGroup.add(e) 
 
 
+#image resource reference:<a href="https://www.freepik.com/vectors/animation-frames">Animation frames vector created by freepik - www.freepik.com</a> 
+#code reference: https://kidscancode.org/blog/2016/09/pygame_shmup_part_10/
+explosion_anim = {}
+BLACK=(0,0,0)
+explosion_anim= []
+for i in range(5):
+    filename = 'explosion_{}.png'.format(i)
+    
+    img = loadImage(filename)
+    img.set_colorkey(BLACK)
+    img=pygame.transform.scale(img, (50, 50))
+    explosion_anim.append(img)
+class Explosion(pygame.sprite.Sprite):
+    def __init__(self, center,size):
+        pygame.sprite.Sprite.__init__(self)
+        self.size=size
+        self.image = explosion_anim[0]
+        self.rect = self.image.get_rect()
+        self.rect.center = center
+        self.frame = 0
+        self.last_update = pygame.time.get_ticks()
+        self.frame_rate = 60
+
+    def update(self):
+        now = pygame.time.get_ticks()
+        if now - self.last_update > self.frame_rate:
+            self.last_update = now
+            self.frame += 1
+            if self.frame == len(explosion_anim):
+                self.kill()
+            else:
+                center = self.rect.center
+                self.image = pygame.transform.scale(explosion_anim[self.frame],(self.size,self.size))
+                self.rect = self.image.get_rect()
+                self.rect.center = center
 clock=pygame.time.Clock()
 #referenced: https://stackoverflow.com/questions/46390231/how-can-i-create-a-text-input-box-with-pygame
 def name():
@@ -763,14 +784,15 @@ def quitButton():
         font = pygame.font.Font(None, fontSize+20)
         text = font.render("Do you want to exit the game?", True, WHITE)
         screen.blit(text, (530, 330))
-        lenButton = 80
-        widButton = 25
+        lenButton = 150
+        widButton = 30
         yPos += 80
-        yes = Button('YES', None, fontSize, BLACK,  650, yPos, WHITE, lenButton, widButton)
+        buttonFontSize=36
+        yes = Button('YES', None, buttonFontSize, BLACK,  650, yPos, WHITE, lenButton, widButton)
         if yes.click(screen, events):
             return True 
 
-        no = Button('NO', None, fontSize, BLACK,  810, yPos, WHITE, lenButton, widButton)
+        no = Button('NO', None, buttonFontSize, BLACK,  810, yPos, WHITE, lenButton, widButton)
         if no.click(screen, events):
             return False
         pygame.display.update()
@@ -806,14 +828,10 @@ def quitButton():
 def Main_Prompt():
     while True:
         clock.tick(FPS)
-        #screen.fill(BLACK)
-        BACKGROUND = pygame.transform.scale(backgroundIMG, (500, 150))
-        screen.blit(BACKGROUND, (470,300))
+        pygame.draw.rect(screen, BROWN, pygame.Rect(w/2-200,300,450,150))
+        pygame.draw.rect(screen, WHITE, pygame.Rect(w/2-200,300,450,150),width=5)
         events = pygame.event.get()
-        exitButton = ButtonText('X', None, 25, WHITE, 950, 310)
-        if exitButton.click(screen, events):
-            
-            return PAGE_MAIN
+        
         font = pygame.font.Font(None, 40)
         text = font.render("Return to Main Menu?", True, WHITE)
         screen.blit(text, (510, 330))
@@ -1043,8 +1061,8 @@ def game_play():
             if game_level<=4:
                 game_level=4
         #clear all global variables
-        if(player.lives<3):
-            
+        if(player.lives<=0):
+           
             store_score()
             return PAGE_GAMEOVER
              
@@ -1208,23 +1226,31 @@ def Main():
     while True:
         #clock.tick(FPS)
         if scene is None:
-            music = pygame.mixer.music.load(os.path.join('Material','Audio',"Music_menu.mp3"))
+            pygame.mixer.music.load(os.path.join('Material','Audio',"Music_menu.mp3"))
+            pygame.mixer.music.set_volume(volume)
+            pygame.mixer.music.play(-1)
             pygame.mixer.music.play(-1)
             scene=main_menu()
         if scene == PAGE_MAIN:
-            music = pygame.mixer.music.load(os.path.join('Material','Audio',"Music_menu.mp3"))
+            pygame.mixer.music.load(os.path.join('Material','Audio',"Music_menu.mp3"))
+            pygame.mixer.music.set_volume(volume)
             pygame.mixer.music.play(-1)
             scene = main_menu()
         if scene == PAGE_GAME:
+            pygame.mixer.music.load(os.path.join('Material','Audio',"Music_game.mp3"))
+            pygame.mixer.music.set_volume(volume)
+            pygame.mixer.music.play(-1) 
             scene = game_play()
         if scene == PAGE_SCOREBOARD:
             scene = scoreboardMenu()
         if scene == PAGE_OPTION:
-            music = pygame.mixer.music.load(os.path.join('Material','Audio',"Music_optionmenu.mp3"))
-            pygame.mixer.music.play(-1) 
+            pygame.mixer.music.load(os.path.join('Material','Audio',"Music_menu.mp3"))
+            pygame.mixer.music.set_volume(volume)
+            pygame.mixer.music.play(-1)  
             scene = optionsMenu()
         if scene == PAGE_GAMEOVER:
-            music = pygame.mixer.music.load(os.path.join('Material','Audio',"Music_menu.mp3"))
+            pygame.mixer.music.load(os.path.join('Material','Audio',"Music_gameover.mp3"))
+            pygame.mixer.music.set_volume(volume)
             pygame.mixer.music.play()
             scene = gameover_menu()
         if scene==PAGE_QUIT:

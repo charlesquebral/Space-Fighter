@@ -33,7 +33,7 @@ class Bullet_Spread(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image=image
         self.image.set_colorkey(WHITE) #remove all white pixels and make them transparent
-        self.image=pygame.transform.scale(self.image,(30,30))
+        self.image=pygame.transform.scale(self.image,(50,50))
         
         self.rect=self.image.get_rect() #gets the surface area of the image
         self.rect.centerx=playerX #bullet object position width
