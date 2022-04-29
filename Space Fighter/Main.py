@@ -162,6 +162,16 @@ class Enemy_UFO(Enemy):
         if (r==0):
             self.speed_x=-self.speed_x
         self.speed_y=2
+
+        #play spawn sound
+        soundRand = random.randint(0, 0)
+        if (soundRand == 1):
+            ufoSpawn = pygame.mixer.Sound(os.path.join('Material','Audio',"enemy_ufo_spawn1.mp3"))
+        else:
+            ufoSpawn = pygame.mixer.Sound(os.path.join('Material','Audio',"enemy_ufo_spawn2.mp3"))
+
+        ufoSpawn.play()
+        ufoSpawn.set_volume(volume)
     def shoot(self):
         
             if self.bullet_gap>=40:
@@ -174,6 +184,10 @@ class Enemy_UFO(Enemy):
                     spriteGroup.add(bullet)
                     ebulletGroup.add(bullet)
                     self.bullet_gap=1
+                    #play shoot sound (single shoot sound for now)
+                    ufoShoot = pygame.mixer.Sound(os.path.join('Material','Audio',"ship_shoot_single.mp3"))
+                    ufoShoot.play()
+                    ufoShoot.set_volume(volume)
                   
     #defines movement of ufo enemy, random vertical movement
     def update(self):
@@ -212,6 +226,16 @@ class Enemy_cthulhu(Enemy):
             self.speed_x=-self.speed_x
         
         self.speed_y=3
+
+        #play spawn sound
+        soundRand = random.randint(0, 1)
+        if (soundRand == 0):
+            cthulhuSpawn = pygame.mixer.Sound(os.path.join('Material','Audio',"enemy_cthulhu_spawn1.mp3"))
+        else:
+            cthulhuSpawn = pygame.mixer.Sound(os.path.join('Material','Audio',"enemy_cthulhu_spawn2.mp3"))
+
+        cthulhuSpawn.play()
+        cthulhuSpawn.set_volume(volume)
     def shoot(self):
         
             if self.bullet_gap>=30:
@@ -239,6 +263,10 @@ class Enemy_cthulhu(Enemy):
                     ebulletGroup.add(bullet)
                
                 self.bullet_gap=1
+                #play shoot sound (double shoot sound for now)
+                cthulhuShoot = pygame.mixer.Sound(os.path.join('Material','Audio',"ship_shoot_double.mp3"))
+                cthulhuShoot.play()
+                cthulhuShoot.set_volume(volume)
     
                
     #defines movement of cthulhu enemy, random vertical movement
@@ -302,6 +330,11 @@ class Player(pygame.sprite.Sprite):
         current_time=pygame.time.get_ticks()
         if self.respawn and current_time-self.respawn_time>2000:
             self.respawn=False
+
+            #play spawn sound
+            playerSpawn = pygame.mixer.Sound(os.path.join('Material','Audio',"ship_spawn.mp3"))
+            playerSpawn.play()
+            playerSpawn.set_volume(volume)
         if current_time-self.bonus_time>10000:
             self.bullet_num=1
             self.bonus_time=current_time
@@ -338,6 +371,11 @@ class Player(pygame.sprite.Sprite):
                     spriteGroup.add(bullet)
                     bulletGroup.add(bullet)
                     self.bullet_gap=1
+
+                    #play shoot sound
+                    playerShootSingle = pygame.mixer.Sound(os.path.join('Material','Audio',"ship_shoot_single.mp3"))
+                    playerShootSingle.play()
+                    playerShootSingle.set_volume(volume)
                 elif self.bullet_num==2:
                     bullet1=Bullet(bulletIMG,30,30,self.rect.left,self.rect.top,1,-10)
                     bullet2=Bullet(bulletIMG,30,30,self.rect.right,self.rect.top,1,-10)
@@ -346,6 +384,11 @@ class Player(pygame.sprite.Sprite):
                     spriteGroup.add(bullet2)
                     bulletGroup.add(bullet2)
                     self.bullet_gap=1
+
+                    #play shoot sound
+                    playerShootDouble = pygame.mixer.Sound(os.path.join('Material','Audio',"ship_shoot_double.mp3"))
+                    playerShootDouble.play()
+                    playerShootDouble.set_volume(volume)
                 else:
                     bullet=Bullet(laserIMG,50,1368,self.rect.centerx,self.rect.top+25,-1,1000)
                     spriteGroup.add(bullet)
@@ -550,6 +593,11 @@ class Explosion(pygame.sprite.Sprite):
         self.frame = 0
         self.last_update = pygame.time.get_ticks()
         self.frame_rate = 60
+
+        #play explosion sound
+        explosionSound = pygame.mixer.Sound(os.path.join('Material','Audio',"explosion.mp3"))
+        explosionSound.play()
+        explosionSound.set_volume(volume)
 
     def update(self):
         now = pygame.time.get_ticks()
@@ -1237,7 +1285,8 @@ def Main():
             pygame.mixer.music.play(-1)
             scene = main_menu()
         if scene == PAGE_GAME:
-            pygame.mixer.music.load(os.path.join('Material','Audio',"Music_game.mp3"))
+            #pygame.mixer.music.load(os.path.join('Material','Audio',"Music_game.mp3"))
+            pygame.mixer.music.load(os.path.join('Material','Audio',"Music_game_test.mp3"))
             pygame.mixer.music.set_volume(volume)
             pygame.mixer.music.play(-1) 
             scene = game_play()
