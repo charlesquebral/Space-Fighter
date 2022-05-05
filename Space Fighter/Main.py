@@ -43,6 +43,11 @@ IS_PAUSE=False
 ButtonLength = 150
 ButtonWidth = 50
 
+def loadAudio(audioFileName):
+    pygame.mixer.music.load(os.path.join('Material','Audio',audioFileName))
+    pygame.mixer.music.set_volume(volume)
+    pygame.mixer.music.play(-1)
+
 def loadImage(image):
     return pygame.image.load(os.path.join('Material','Image', image)).convert()
 
@@ -1258,39 +1263,31 @@ def optionsMenu():
 
         pygame.display.update()
 def Main():
-    music = pygame.mixer.music.load(os.path.join('Material','Audio',"Music_menu.mp3"))
-    pygame.mixer.music.play(-1) 
+    #music = pygame.mixer.music.load(os.path.join('Material','Audio',"Music_menu.mp3"))
+    #pygame.mixer.music.play(-1) 
     scene = PAGE_MAIN
     while True:
         #clock.tick(FPS)
-        if scene is None:
-            pygame.mixer.music.load(os.path.join('Material','Audio',"Music_menu.mp3"))
-            pygame.mixer.music.set_volume(volume)
-            pygame.mixer.music.play(-1)
-            pygame.mixer.music.play(-1)
+        if scene is None or scene == PAGE_MAIN:
+            loadAudio("Music_menu.mp3")
+            #pygame.mixer.music.play(-1)
             scene=main_menu()
-        if scene == PAGE_MAIN:
+        """ if scene == PAGE_MAIN:
             pygame.mixer.music.load(os.path.join('Material','Audio',"Music_menu.mp3"))
             pygame.mixer.music.set_volume(volume)
             pygame.mixer.music.play(-1)
-            scene = main_menu()
+            scene = main_menu() """
         if scene == PAGE_GAME:
             #pygame.mixer.music.load(os.path.join('Material','Audio',"Music_game.mp3"))
-            pygame.mixer.music.load(os.path.join('Material','Audio',"Music_game_test.mp3"))
-            pygame.mixer.music.set_volume(volume)
-            pygame.mixer.music.play(-1) 
+            loadAudio("Music_game_test.mp3") 
             scene = game_play()
         if scene == PAGE_SCOREBOARD:
             scene = scoreboardMenu()
         if scene == PAGE_OPTION:
-            pygame.mixer.music.load(os.path.join('Material','Audio',"Music_menu.mp3"))
-            pygame.mixer.music.set_volume(volume)
-            pygame.mixer.music.play(-1)  
+            loadAudio("Music_menu.mp3")
             scene = optionsMenu()
         if scene == PAGE_GAMEOVER:
-            pygame.mixer.music.load(os.path.join('Material','Audio',"Music_gameover.mp3"))
-            pygame.mixer.music.set_volume(volume)
-            pygame.mixer.music.play()
+            loadAudio("Music_gameover.mp3")
             scene = gameover_menu()
         if scene==PAGE_QUIT:
             pygame.quit()
