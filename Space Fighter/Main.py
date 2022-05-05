@@ -1203,9 +1203,12 @@ def scoreboardMenu():
 
 
 def optionsMenu():
-    
-    
     global level,volume
+    fontSize = 100
+    xCoord = 150
+    yCoord = 150
+    xButton = 500
+    yButton = 160
 
     while True:
         clock.tick(FPS)
@@ -1213,7 +1216,6 @@ def optionsMenu():
         screen.blit(backgroundIMG, (0,0))
         events = pygame.event.get()
 
-         
         for event in events:
           if event.type == pygame.QUIT: #if user clicks the x button, exit pygame
             if quitButton():
@@ -1227,13 +1229,13 @@ def optionsMenu():
 
         pygame.display.set_caption("Options")
 
-        font = pygame.font.Font(None, 100)
+        font = pygame.font.Font(None, fontSize)
         text = font.render("OPTIONS", True, WHITE)
         screen.blit(text, (w/2.5, 30))
         levelName = font.render("LEVEL", True, WHITE)
-        screen.blit(levelName, (150, 150) )
-        button_level_down = Button("<", None, 100, BLACK, 500, 160, WHITE, ButtonLength, ButtonWidth)
-        button_level_up = Button(">", None, 100, BLACK,  1000, 160,WHITE, ButtonLength, ButtonWidth)
+        screen.blit(levelName, (xCoord, yCoord) )
+        button_level_down = Button("<", None, fontSize, BLACK, xButton, yButton, WHITE, ButtonLength, ButtonWidth)
+        button_level_up = Button(">", None, fontSize, BLACK,  xButton*2, yButton,WHITE, ButtonLength, ButtonWidth)
 
         if button_level_down.click(screen, events) and level > 1:
             level = level - 1
@@ -1242,16 +1244,16 @@ def optionsMenu():
         
         if level == 4:
             levelOnScreen = font.render("INFINITE", True, WHITE)
-            screen.blit(levelOnScreen, (600, 150))
+            screen.blit(levelOnScreen, (xCoord*4, yCoord))
         else:
             level_display = font.render(str(level), True, WHITE)
-            screen.blit(level_display, (700, 150))
+            screen.blit(level_display, (xCoord*5-50, yCoord))
 
         soundLevel = font.render("SOUND", True, WHITE)
-        screen.blit(soundLevel, (150, 300))  
+        screen.blit(soundLevel, (xCoord, yCoord*2))  
         
-        button_volume_down = Button("<", None, 100, BLACK,  500, 310,WHITE, ButtonLength, ButtonWidth)
-        button_volume_up = Button(">", None, 100, BLACK,  1000, 310,WHITE, ButtonLength, ButtonWidth)
+        button_volume_down = Button("<", None, fontSize, BLACK,  xButton, yButton*2-10,WHITE, ButtonLength, ButtonWidth)
+        button_volume_up = Button(">", None, fontSize, BLACK,  xButton*2, yButton*2-10,WHITE, ButtonLength, ButtonWidth)
         if button_volume_down.click(screen, events) and volume > 0.0:
             volume = round(volume - 0.1, 1)
         elif button_volume_up.click(screen, events) and volume < 1.0:
@@ -1262,6 +1264,7 @@ def optionsMenu():
         screen.blit(soundOnScreen, (700, 310))
 
         pygame.display.update()
+        
 def Main():
     #music = pygame.mixer.music.load(os.path.join('Material','Audio',"Music_menu.mp3"))
     #pygame.mixer.music.play(-1) 
