@@ -110,28 +110,33 @@ ebulletGroup=pygame.sprite.Group() #from enemy
 bonusGroup=pygame.sprite.Group()
 
 #default enemy object, covid image and have 10 heart
-class Enemy(pygame.sprite.Sprite):
+class Character(pygame.sprite.Sprite):
+    def __init__(self, curr_health, max_health, image, xScale, yScale):
+        self.current_health = curr_health
+        self.max_health = max_health
+        self.image = image
+        self.image.set_colorkey(WHITE)
+        self.image = pygame.transform.scale(self.image, (xScale,yScale))
+        self.rect = self.image.get_rect()
+
+#default enemy object, covid image and have 10 heart
+class Enemy(Character):
     def __init__(self,image):
         global score
 
         pygame.sprite.Sprite.__init__(self)
-        self.current_health=10
-        self.max_health=10
-        self.image=image
-        self.image.set_colorkey(WHITE) #remove all white pixels and make them transparent
-        self.image=pygame.transform.scale(self.image,(50,50))
-        self.rect=self.image.get_rect() #gets the surface area of the image
+        super().__init__(10, 10, image, 50, 50)
         self.rect.x=random.randint(50,w-50) #enemy object position width
         self.rect.y=30
-        r=random.randint(0,1)
+        #r=random.randint(0,1)
         
         self.speed_y=7
         
     #define covid enemy's movement, moves as a horizontal line and static downward    
-    def update(self): 
+    def update(self, toRange=950): 
         self.rect.y+=self.speed_y
         if self.rect.top > h:
-            self.rect.x=random.randint(50,950) #enemy object position width
+            self.rect.x=random.randint(50,toRange) #enemy object position width
             self.rect.y=30
             #self.speed=random.randint(1,5)
     #decrease covid enemy object health 
@@ -147,12 +152,8 @@ class Enemy_UFO(Enemy):
     def __init__(self,image):
         global score
         pygame.sprite.Sprite.__init__(self)
-        self.current_health=20
-        self.max_health=20
-        self.image=image
-        self.image.set_colorkey(WHITE) #remove all white pixels and make them transparent
-        self.image=pygame.transform.scale(self.image,(100,100))
-        self.rect=self.image.get_rect() #gets the surface area of the image
+        Character.__init__(self, 20,20, image, 100, 100)
+        #self.rect=self.image.get_rect() #gets the surface area of the image
         self.rect.x=random.randint(100,w-100) #enemy object position width
         self.rect.y=30
         self.bullet_gap=0
@@ -193,11 +194,7 @@ class Enemy_UFO(Enemy):
     def update(self):
         self.shoot()
         self.rect.x=self.rect.x
-        self.rect.y=self.rect.y+self.speed_y
-        if self.rect.top > h:
-            self.rect.x=random.randint(50,950) #enemy object position width
-            self.rect.y=30
-            #self.speed=random.randint(1,5)
+        super().update()
         if self.rect.left>w or self.rect.right<0:
             self.speed_x=-self.speed_x
 
@@ -206,14 +203,9 @@ class Enemy_cthulhu(Enemy):
     def __init__(self,image):
         global score
         pygame.sprite.Sprite.__init__(self)
-        self.current_health=30
-        self.max_health=30
-        self.original_image=image
-        self.original_image=pygame.transform.scale(self.original_image,(150,150))
-        self.original_image.set_colorkey(WHITE) #remove all white pixels and make them transparent
-        self.image=self.original_image.copy()
-        
-        self.rect=self.image.get_rect() #gets the surface area of the image
+        Character.__init__(self, 30,30, image, 150, 150)
+        self.original_image = self.image.copy()
+        #self.rect=self.image.get_rect() #gets the surface area of the image
         self.rect.x=random.randint(150,w-150) #enemy object position width
         self.rect.y=30
         self.rotation_degree=4
@@ -275,11 +267,7 @@ class Enemy_cthulhu(Enemy):
         self.rotate()
         self.shoot()
         self.rect.x=self.rect.x-self.speed_x
-        self.rect.y=self.rect.y+self.speed_y
-        if self.rect.top > h:
-            self.rect.x=random.randint(50,1680) #enemy object position width
-            self.rect.y=30
-            #self.speed=random.randint(1,5)
+        super().update(1680)
         if self.rect.left>w or self.rect.right<0:
             self.speed_x=-self.speed_x
     
@@ -293,19 +281,14 @@ class Enemy_cthulhu(Enemy):
         self.rect=self.image.get_rect()
         #reset new image to original center
         self.rect.center=center
-class Player(pygame.sprite.Sprite):
+
+class Player(Character):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image=playerIMG
-        self.image.set_colorkey(WHITE) #remove all white pixels and make them transparent
-        self.image=pygame.transform.scale(self.image,(70,100))
-        self.rect=self.image.get_rect() #gets the surface area of the image
+        super().__init__(100, 100, playerIMG, 70, 100)
         self.rect.centerx=w/2 #player object position width
         self.rect.bottom=h-10
         self.speed=10
-        #health bar initialization
-        self.current_health=100
-        self.max_health=100
         self.health_bar_length=200
         self.health_ratio=self.max_health/self.health_bar_length#maximum health/health bar length=0.5, if current_helath*ratio, the current health will be 1/2 of pixels in length
         #max 3 lives, respawn will hide the player image for 2 seconds
