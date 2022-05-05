@@ -515,7 +515,7 @@ def hit_enemy(attackGroup,victumGroup):
             #when enemy health run out, destroy the enemy object and spawn a new one according to score
             if (enemy.current_health<=0):
                 score=score+enemy.max_health
-                print(enemy.rect.height)
+                
                 expl = Explosion(enemy.rect.center,enemy.max_health*3)
                 
                 spriteGroup.add(expl)
@@ -524,27 +524,45 @@ def hit_enemy(attackGroup,victumGroup):
                 enemy.kill()
                 if game_level==1:
                     if(len(enemyGroup)<enemyTotal):
-                        print("LEVEL1:"+str(enemyTotal))
+                        
                         e=Enemy(enemy_covidIMG)
                         spriteGroup.add(e)
                         enemyGroup.add(e)
+                    
+                    
                 elif game_level==2:
                     if(len(enemyGroup)<enemyTotal):
-                        print("LEVEL2:"+str(enemyTotal))
+                        
                         e=Enemy_UFO(enemy_ufoIMG)
                         spriteGroup.add(e)
                         enemyGroup.add(e)
+                    else:
+                        for e in enemyGroup:
+                            e.kill()
+                        for i in range(enemyTotal):
+            
+                            e=Enemy_UFO(enemy_ufoIMG)
+                            spriteGroup.add(e)
+                            enemyGroup.add(e)
                 elif game_level==3:
                    
                     if(len(enemyGroup)<enemyTotal):
-                        print("LEVEL3:"+str(enemyTotal))
+                        
                         e=Enemy_cthulhu(enemy_cthulhuIMG)
                         spriteGroup.add(e)
                         enemyGroup.add(e)
+                    else:
+                        for e in enemyGroup:
+                            e.kill()
+                        for i in range(enemyTotal):
+            
+                            e=Enemy_cthulhu(enemy_cthulhuIMG)
+                            spriteGroup.add(e)
+                            enemyGroup.add(e)
 
-                else:
+                elif game_level==4:
                     if(len(enemyGroup)<enemyTotal):
-                        print("LEVEL4:"+str(enemyTotal))
+                        
                         random_int=random.randint(1,3)
                         if random_int==1:
                             e=Enemy(enemy_covidIMG)
@@ -1020,12 +1038,14 @@ def game_play():
     #initialize some covid shaped enemy when score is lower than 10
     if (game_level==1):
         enemyTotal=int(8/game_level)
+        
         for i in range(enemyTotal):
             
             e=Enemy(enemy_covidIMG)
             spriteGroup.add(e)
             enemyGroup.add(e)
     elif game_level==2:
+          
           
           enemyTotal=int(8/game_level)
           for i in range(enemyTotal):
@@ -1037,7 +1057,6 @@ def game_play():
           
           enemyTotal=int(8/game_level)
           for i in range(enemyTotal):
-            
             e=Enemy_cthulhu(enemy_cthulhuIMG)
             spriteGroup.add(e)
             enemyGroup.add(e)
@@ -1087,11 +1106,12 @@ def game_play():
            
           
         if(score<=100):
+
             if game_level<=1:
                 game_level=1
             
         elif score>100 and score<=300:
-           
+          
             if game_level<=2:
                 game_level=2
             
@@ -1103,6 +1123,8 @@ def game_play():
            
             if game_level<=4:
                 game_level=4
+
+
         #clear all global variables
         if(player.lives<=0):
            
@@ -1203,12 +1225,9 @@ def scoreboardMenu():
 
 
 def optionsMenu():
+    
+    
     global level,volume
-    fontSize = 100
-    xCoord = 150
-    yCoord = 150
-    xButton = 500
-    yButton = 160
 
     while True:
         clock.tick(FPS)
@@ -1216,6 +1235,7 @@ def optionsMenu():
         screen.blit(backgroundIMG, (0,0))
         events = pygame.event.get()
 
+         
         for event in events:
           if event.type == pygame.QUIT: #if user clicks the x button, exit pygame
             if quitButton():
@@ -1229,13 +1249,13 @@ def optionsMenu():
 
         pygame.display.set_caption("Options")
 
-        font = pygame.font.Font(None, fontSize)
+        font = pygame.font.Font(None, 100)
         text = font.render("OPTIONS", True, WHITE)
         screen.blit(text, (w/2.5, 30))
         levelName = font.render("LEVEL", True, WHITE)
-        screen.blit(levelName, (xCoord, yCoord) )
-        button_level_down = Button("<", None, fontSize, BLACK, xButton, yButton, WHITE, ButtonLength, ButtonWidth)
-        button_level_up = Button(">", None, fontSize, BLACK,  xButton*2, yButton,WHITE, ButtonLength, ButtonWidth)
+        screen.blit(levelName, (150, 150) )
+        button_level_down = Button("<", None, 100, BLACK, 500, 160, WHITE, ButtonLength, ButtonWidth)
+        button_level_up = Button(">", None, 100, BLACK,  1000, 160,WHITE, ButtonLength, ButtonWidth)
 
         if button_level_down.click(screen, events) and level > 1:
             level = level - 1
@@ -1244,16 +1264,16 @@ def optionsMenu():
         
         if level == 4:
             levelOnScreen = font.render("INFINITE", True, WHITE)
-            screen.blit(levelOnScreen, (xCoord*4, yCoord))
+            screen.blit(levelOnScreen, (600, 150))
         else:
             level_display = font.render(str(level), True, WHITE)
-            screen.blit(level_display, (xCoord*5-50, yCoord))
+            screen.blit(level_display, (700, 150))
 
         soundLevel = font.render("SOUND", True, WHITE)
-        screen.blit(soundLevel, (xCoord, yCoord*2))  
+        screen.blit(soundLevel, (150, 300))  
         
-        button_volume_down = Button("<", None, fontSize, BLACK,  xButton, yButton*2-10,WHITE, ButtonLength, ButtonWidth)
-        button_volume_up = Button(">", None, fontSize, BLACK,  xButton*2, yButton*2-10,WHITE, ButtonLength, ButtonWidth)
+        button_volume_down = Button("<", None, 100, BLACK,  500, 310,WHITE, ButtonLength, ButtonWidth)
+        button_volume_up = Button(">", None, 100, BLACK,  1000, 310,WHITE, ButtonLength, ButtonWidth)
         if button_volume_down.click(screen, events) and volume > 0.0:
             volume = round(volume - 0.1, 1)
         elif button_volume_up.click(screen, events) and volume < 1.0:
@@ -1264,7 +1284,6 @@ def optionsMenu():
         screen.blit(soundOnScreen, (700, 310))
 
         pygame.display.update()
-        
 def Main():
     #music = pygame.mixer.music.load(os.path.join('Material','Audio',"Music_menu.mp3"))
     #pygame.mixer.music.play(-1) 
