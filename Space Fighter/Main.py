@@ -385,18 +385,19 @@ class Player(Character):
   
     #detect collision between player and the enemy, if player is hit, decrease health and reset enemy object
     def hit_player(self):
+        global game_level
         hit_group=pygame.sprite.spritecollide(self,enemyGroup,True)
         for  enemy in hit_group:
             self.minus_health(enemy.max_health)
-            if level==1:
+            if game_level==1:
               e=Enemy(enemy_covidIMG)
               spriteGroup.add(e)
               enemyGroup.add(e)
-            elif level==2:
+            elif game_level==2:
                e=Enemy_UFO(enemy_ufoIMG)
                spriteGroup.add(e)
                enemyGroup.add(e)
-            elif level==3:
+            elif game_level==3:
                e=Enemy_cthulhu(enemy_cthulhuIMG)
                spriteGroup.add(e)
                enemyGroup.add(e)
@@ -999,7 +1000,47 @@ def gameover_menu():
                 return PAGE_GAMEOVER
         
         pygame.display.update()        
+def load_level():
+    global game_level,enemyTotal,enemyGroup,spriteGroup
+    # initialize some covid shaped enemy when score is lower than 10
+    if (game_level == 1):
+        enemyGroup.empty()
+        enemyTotal = int(8 / game_level)
 
+        for i in range(enemyTotal):
+            e = Enemy(enemy_covidIMG)
+            spriteGroup.add(e)
+            enemyGroup.add(e)
+    elif game_level == 2:
+        enemyGroup.empty()
+        enemyTotal = int(8 / game_level)
+        for i in range(enemyTotal):
+            e = Enemy_UFO(enemy_ufoIMG)
+            spriteGroup.add(e)
+            enemyGroup.add(e)
+    elif game_level == 3:
+        enemyGroup.empty()
+        enemyTotal = int(8 / game_level)
+        for i in range(enemyTotal):
+            e = Enemy_cthulhu(enemy_cthulhuIMG)
+            spriteGroup.add(e)
+            enemyGroup.add(e)
+    elif game_level == 4:
+        enemyGroup.empty()
+        for i in range(enemyTotal):
+            random_int = random.randint(1, 3)
+            if random_int == 1:
+                e = Enemy(enemy_covidIMG)
+                spriteGroup.add(e)
+                enemyGroup.add(e)
+            elif random_int == 2:
+                e = Enemy_UFO(enemy_ufoIMG)
+                spriteGroup.add(e)
+                enemyGroup.add(e)
+            elif random_int == 3:
+                e = Enemy_cthulhu(enemy_cthulhuIMG)
+                spriteGroup.add(e)
+                enemyGroup.add(e)
 def game_play():
     global level,game_level,score,enemyTotal,IS_PAUSE
     IS_PAUSE=False
@@ -1009,6 +1050,7 @@ def game_play():
     pause_button = ButtonImage(pauseIMG, 50, 50, w-200, 20)
     
     score=0
+    enemyTotal=8
     playerGroup.empty()
     bonusGroup.empty()
     enemyGroup.empty()
@@ -1035,47 +1077,7 @@ def game_play():
 
 
     
-    #initialize some covid shaped enemy when score is lower than 10
-    if (game_level==1):
-        enemyTotal=int(8/game_level)
-        
-        for i in range(enemyTotal):
-            
-            e=Enemy(enemy_covidIMG)
-            spriteGroup.add(e)
-            enemyGroup.add(e)
-    elif game_level==2:
-          
-          
-          enemyTotal=int(8/game_level)
-          for i in range(enemyTotal):
-            
-            e=Enemy_UFO(enemy_ufoIMG)
-            spriteGroup.add(e)
-            enemyGroup.add(e)
-    elif game_level==3:
-          
-          enemyTotal=int(8/game_level)
-          for i in range(enemyTotal):
-            e=Enemy_cthulhu(enemy_cthulhuIMG)
-            spriteGroup.add(e)
-            enemyGroup.add(e)
-    else:
-       
-        for i in range(enemyTotal):
-                random_int=random.randint(1,3)
-                if random_int==1:
-                    e=Enemy(enemy_covidIMG)
-                    spriteGroup.add(e)
-                    enemyGroup.add(e) 
-                elif random_int==2:
-                    e=Enemy_UFO(enemy_ufoIMG)
-                    spriteGroup.add(e)
-                    enemyGroup.add(e) 
-                elif random_int==3:
-                    e=Enemy_cthulhu(enemy_cthulhuIMG)
-                    spriteGroup.add(e)
-                    enemyGroup.add(e) 
+    load_level()
     
     active=True
     while active:  
@@ -1109,18 +1111,24 @@ def game_play():
 
             if game_level<=1:
                 game_level=1
+
             
         elif score>100 and score<=300:
-          
+
             if game_level<=2:
+
                 game_level=2
+
             
         elif score>300 and score<=600:
-            
+
             if game_level<=3:
+
+
                 game_level=3
+
         else:
-           
+
             if game_level<=4:
                 game_level=4
 
