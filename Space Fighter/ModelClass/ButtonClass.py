@@ -10,7 +10,6 @@ class ButtonText():
     self.clicked = False
 
   def click(self, surface,events):
-    action = False
     #get mouse position
     mousePos = pygame.mouse.get_pos()
 
