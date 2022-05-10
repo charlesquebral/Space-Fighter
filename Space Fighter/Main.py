@@ -1172,6 +1172,7 @@ def game_play():
 
 def scoreboardMenu():
       global IS_PAUSE
+      yHeaderPos = 50
       while True:
         clock.tick(FPS)
         screen.fill(BLACK)
@@ -1194,9 +1195,9 @@ def scoreboardMenu():
 
         font = pygame.font.Font(None, 90)
         text_name = font.render("Name", True, WHITE)
-        screen.blit(text_name, (300, 50))
+        screen.blit(text_name, (300, yHeaderPos))
         text_score = font.render("Score", True, WHITE)
-        screen.blit(text_score, (w/2, 50))
+        screen.blit(text_score, (w/2, yHeaderPos))
         
         with open('scoreboard.txt', 'r') as f:
           font = pygame.font.Font(None, 50)
@@ -1210,16 +1211,16 @@ def scoreboardMenu():
           scoresList.sort(key=lambda s:s.score,reverse=True)
           j = 0
           for i in range(len(scoresList)):
-            
-          
+             
+            yNameScorePos = 100 + ((j+1)*50)
           
             strToRender = str(j+1) + ') ' + scoresList[i].user
             text = font.render(strToRender, True, WHITE)
           
-            screen.blit(text, (300, 100 + ((j+1)*50)))
+            screen.blit(text, (300, yNameScorePos))
             strToRender=str(scoresList[i].score)
             text=font.render(strToRender,True,WHITE)
-            screen.blit(text,(w/2,100+(j+1)*50))
+            screen.blit(text,(w/2, yNameScorePos))
 
             j += 1
 
